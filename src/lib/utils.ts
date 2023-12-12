@@ -26,8 +26,8 @@ export function formatPrice(
 }
 
 export function constructMetadata({
-  title = "DigitalHippo - the marketplace for digital assets",
-  description = "DigitalHippo is an open-source marketplace for high-quality digital goods.",
+  title = "BinStore - the marketplace for digital assets",
+  description = "BinStore is an open-source marketplace for high-quality digital goods.",
   image = "/thumbnail.png",
   icons = "/favicon.ico",
   noIndex = false,
