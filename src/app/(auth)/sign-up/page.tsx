@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { ZodError } from "zod";
