@@ -39,11 +39,11 @@ const start = async () => {
   app.use((req, res) => nextHandler(req, res));
 
   nextApp.prepare().then(() => {
-    payload.logger.info("Nest.js started");
+    payload.logger.info("Next.js started");
 
     app.listen(PORT, async () => {
       payload.logger.info(
-        `Nest.js App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`
+        `Next.js App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`
       );
     });
   });

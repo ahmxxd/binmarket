@@ -45,17 +45,17 @@ export const Products: CollectionConfig = {
       required: true,
     },
 
-    // Products files settings
-    // {
-    //   name: "product_files",
-    //   label: "Product file(s)",
-    //   type: "relationship",
-    //   required: true,
-    //   relationTo: "product_files",
-    //   hasMany: false,
-    // },
+    //Products files settings
     {
-      name: "approvedForeSale",
+      name: "product_files",
+      label: "Product file(s)",
+      type: "relationship",
+      required: true,
+      relationTo: "product_files",
+      hasMany: false,
+    },
+    {
+      name: "approvedForSale",
       label: "Product Status",
       type: "select",
       defaultValue: "pending",
@@ -110,15 +110,15 @@ export const Products: CollectionConfig = {
       type: "array",
       label: "Product images",
       minRows: 1,
-      maxRows: 10,
+      maxRows: 4,
       required: true,
       labels: {
         singular: "Image",
-        plural: "images",
+        plural: "Images",
       },
       fields: [
         {
-          name: "Image",
+          name: "image",
           type: "upload",
           relationTo: "media",
           required: true,
