@@ -50,6 +50,7 @@
     "react-hook-form-mui": "^6.7.3",
     "shadcn-ui": "^0.4.1",
     "sonner": "^1.2.4",
+    "stripe": "^14.10.0",
     "swiper": "^11.0.5",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
