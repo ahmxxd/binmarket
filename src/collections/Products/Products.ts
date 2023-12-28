@@ -1,7 +1,10 @@
-import { BeforeChangeHook } from "payload/dist/collections/config/types";
+import {
+  AfterChangeHook,
+  BeforeChangeHook,
+} from "payload/dist/collections/config/types";
 import { PRODUCT_CATEGORIES } from "../../config";
-import { CollectionConfig } from "payload/types";
-import { Product } from "../../payload-types";
+import { Access, CollectionConfig } from "payload/types";
+import { Product, User } from "../../payload-types";
 import { stripe } from "../../lib/stripe";
 
 const addUser: BeforeChangeHook<Product> = async ({ req, data }) => {
@@ -10,31 +13,96 @@ const addUser: BeforeChangeHook<Product> = async ({ req, data }) => {
   return { ...data, user: user.id };
 };
 
+const syncUser: AfterChangeHook<Product> = async ({ req, doc }) => {
+  const fullUser = await req.payload.findByID({
+    collection: "users",
+    id: req.user.id,
+  });
+
+  if (fullUser && typeof fullUser === "object") {
+    const { products } = fullUser;
+
+    const allIDs = [
+      ...(products?.map((product) =>
+        typeof product === "object" ? product.id : product
+      ) || []),
+    ];
+
+    const createdProductIDs = allIDs.filter(
+      (id, index) => allIDs.indexOf(id) === index
+    );
+
+    const dataToUpdate = [...createdProductIDs, doc.id];
+
+    await req.payload.update({
+      collection: "users",
+      id: fullUser.id,
+      data: {
+        products: dataToUpdate,
+      },
+    });
+  }
+};
+
+const isAdminOrHasAccess =
+  (): Access =>
+  ({ req: { user: _user } }) => {
+    const user = _user as User | undefined;
+
+    if (!user) return false;
+    if (user.role === "admin") return true;
+
+    const userProductIDs = (user.products || []).reduce<Array<string>>(
+      (acc, product) => {
+        if (!product) return acc;
+        if (typeof product === "string") {
+          acc.push(product);
+        } else {
+          acc.push(product.id);
+        }
+
+        return acc;
+      },
+      []
+    );
+
+    return {
+      id: {
+        in: userProductIDs,
+      },
+    };
+  };
+
 export const Products: CollectionConfig = {
   slug: "products",
   admin: {
     useAsTitle: "name",
   },
-  access: {},
+  access: {
+    read: isAdminOrHasAccess(),
+    update: isAdminOrHasAccess(),
+    delete: isAdminOrHasAccess(),
+  },
   hooks: {
+    afterChange: [syncUser],
     beforeChange: [
       addUser,
       async (args) => {
         if (args.operation === "create") {
           const data = args.data as Product;
 
-          const CreatedProduct = await stripe.products.create({
+          const createdProduct = await stripe.products.create({
             name: data.name,
             default_price_data: {
-              currency: "NGN",
+              currency: "USD",
               unit_amount: Math.round(data.price * 100),
             },
           });
 
           const updated: Product = {
             ...data,
-            stripeId: CreatedProduct.id,
-            priceId: CreatedProduct.default_price as string,
+            stripeId: createdProduct.id,
+            priceId: createdProduct.default_price as string,
           };
 
           return updated;
@@ -81,9 +149,9 @@ export const Products: CollectionConfig = {
     },
     {
       name: "price",
-      label: "price is NGN",
+      label: "Price in USD",
       min: 0,
-      max: 2000000,
+      max: 1000,
       type: "number",
       required: true,
     },
@@ -94,8 +162,6 @@ export const Products: CollectionConfig = {
       options: PRODUCT_CATEGORIES.map(({ label, value }) => ({ label, value })),
       required: true,
     },
-
-    //Products files settings
     {
       name: "product_files",
       label: "Product file(s)",
@@ -121,11 +187,11 @@ export const Products: CollectionConfig = {
         },
         {
           label: "Approved",
-          value: "Approved",
+          value: "approved",
         },
         {
-          label: "Danied",
-          value: "Danied",
+          label: "Denied",
+          value: "denied",
         },
       ],
     },

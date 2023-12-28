@@ -58,7 +58,7 @@ export function constructMetadata({
       creator: "@ahmxxd",
     },
     icons,
-    metadataBase: new URL("https://digitalhippo.up.railway.app"),
+    metadataBase: new URL("https://binmarket-production.up.railway.app"),
     ...(noIndex && {
       robots: {
         index: false,
