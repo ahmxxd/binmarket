@@ -153,8 +153,6 @@ export const Products: CollectionConfig = {
         hidden: true,
       },
     },
-
-    // Products images
     {
       name: "images",
       type: "array",
