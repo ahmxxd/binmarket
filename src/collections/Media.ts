@@ -25,8 +25,6 @@ export const Media: CollectionConfig = {
       },
     ],
   },
-
-  // Access to images alteration only admin.
   access: {
     read: async ({ req }) => {
       const referer = req.headers.referer;
@@ -66,8 +64,7 @@ export const Media: CollectionConfig = {
         position: "centre",
       },
     ],
-
-    mimeTypes: ["/image/*"],
+    mimeTypes: ["image/*"],
   },
   fields: [
     {

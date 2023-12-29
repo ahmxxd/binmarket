@@ -32,6 +32,7 @@ export const appRouter = router({
       });
 
       const page = cursor || 1;
+
       const {
         docs: items,
         hasNextPage,
@@ -49,6 +50,7 @@ export const appRouter = router({
         limit,
         page,
       });
+
       return {
         items,
         nextPage: hasNextPage ? nextPage : null,

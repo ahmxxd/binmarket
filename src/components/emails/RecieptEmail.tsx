@@ -39,7 +39,7 @@ export const ReceiptEmail = ({
   return (
     <Html>
       <Head />
-      <Preview>Your binMarket Receipt</Preview>
+      <Preview>Your DigitalHippo Receipt</Preview>
 
       <Body style={main}>
         <Container style={container}>

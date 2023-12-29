@@ -12,8 +12,8 @@ import {
 import { Separator } from "./ui/separator";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
-import Image from "next/image";
 import { buttonVariants } from "./ui/button";
+import Image from "next/image";
 import { useCart } from "@/hooks/use-cart";
 import { ScrollArea } from "./ui/scroll-area";
 import CartItem from "./CartItem";
@@ -72,7 +72,7 @@ const Cart = () => {
                   <span>{formatPrice(fee)}</span>
                 </div>
                 <div className="flex">
-                  <span className="flex-1"> Total</span>
+                  <span className="flex-1">Total</span>
                   <span>{formatPrice(cartTotal + fee)}</span>
                 </div>
               </div>
@@ -113,7 +113,7 @@ const Cart = () => {
                   className: "text-sm text-muted-foreground",
                 })}
               >
-                Add items to yur cart to checkout
+                Add items to your cart to checkout
               </Link>
             </SheetTrigger>
           </div>
